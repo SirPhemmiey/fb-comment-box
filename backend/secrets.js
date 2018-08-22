@@ -1,5 +1,12 @@
+// const secrets = {
+//     dbUri: process.env.DB_URI
+// };
+
+// export const getSecret = key => secrets[key];
+
+
 const secrets = {
     dbUri: process.env.DB_URI
-};
+  };
 
-export const getSecret = key => secrets[key];
+  export const getSecret = key => secrets[key];

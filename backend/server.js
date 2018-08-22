@@ -6,14 +6,22 @@ import bodyParser from 'body-parser';
 import logger from 'morgan';
 import mongoose from 'mongoose';
 
-import {getSecret} from './secrets';
+//import {getSecret} from './secrets';
 
 // and create our instances
 const app = express();
 const router = express.Router();
 
 // set our port to either a predetermined port number if you have set it up, or 3001
-const API_PORT = process.env.API_PORT || 3001;
+const API_PORT = process.env.PORT || 3001;
+
+//db config
+//console.log(getSecret('dbUri'));
+//console.log(process.env.DB_URI)
+//console.log(app.get('env'));
+mongoose.connect(process.env.DB_URI);
+let db = mongoose.connection;
+db.on('error', console.error.bind(console, 'MongoDB connection error'));
 // now we should configure the API to use bodyParser and look for JSON data in the request body
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
