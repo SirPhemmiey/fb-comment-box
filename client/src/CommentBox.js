@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import 'whatwg-fetch';
 import CommentList from './CommentList';
 import CommentForm from './CommentForm';
-import DATA from './data';
+//import DATA from './data';
 import './CommentBox.css'
 
 class CommentBox extends Component {
@@ -46,7 +46,8 @@ class CommentBox extends Component {
 
     onUpdateComment = id => {
         const oldComment = this.state.data.find(c => c.id === id);
-        if (!oldComment) return null;
+        //console.log({ oldComment });
+        if (!oldComment) return;
         this.setState({
             author: oldComment.author,
             text: oldComment.text,
@@ -55,12 +56,13 @@ class CommentBox extends Component {
     }
     onDeleteComment = id => {
         const i = this.state.data.findIndex(c => c.id === id);
+        console.log({ i });
         const data = [
             ...this.state.data.splice(0, i),
             ...this.state.data.splice(i + 1)
         ];
         this.setState({ data });
-        fetch(`/api/comments/:${id}`, {
+        fetch(`/api/comments/${id}`, {
             method: "DELETE"
         })
         .then(res => res.json())
@@ -76,8 +78,8 @@ class CommentBox extends Component {
         this.setState(newState);
     }
 
-    submitNewComment = (e) => {
-        e.preventDefault();
+    submitNewComment = () => {
+        //e.preventDefault();
         const { author, text } = this.state;
         const data = [
             ...this.state.data,
@@ -86,7 +88,7 @@ class CommentBox extends Component {
                 text,
                 _id: Date.now().toString(),
                 createdAt: new Date(),
-                createdAt: new Date()
+                updatedAt: new Date()
             }
         ];
         fetch('api/comments', {
@@ -123,7 +125,7 @@ class CommentBox extends Component {
         })
     }
 
-    submitNewComment = (e) => {
+    submitComment = (e) => {
         e.preventDefault();
         const { author, text, updateId } = this.state;
         if (updateId) {
@@ -139,7 +141,9 @@ class CommentBox extends Component {
             <div className="container">
                 <div className="comments">
                     <h2>Comments: </h2>
-                    <CommentList data={this.state.data} />
+                    <CommentList data={this.state.data}
+                    handleUpdateComment={this.onUpdateComment}
+                    handleDeleteComment={this.onDeleteComment} />
                 </div>
                 <div className="form">
                     <CommentForm  author={this.state.author} text={this.state.text}
