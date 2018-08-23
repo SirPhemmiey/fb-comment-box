@@ -6,7 +6,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start:server": "cd backend && nodemon server.js --exec babel-node --presets es2015,stage-0",
     "start:client": "cd client && yarn start",
-    "start:dev": "concurrently \"yarn start:server\" \"yarn start:client\""
+    "start": "concurrently \"yarn start:server\" \"yarn start:client\""
   },
   "repository": "https://github.com/SirPhemmiey/mern-comment-box.git",
   "author": "sirphemmiey <oluwafemiakinde@gmail.com>",
