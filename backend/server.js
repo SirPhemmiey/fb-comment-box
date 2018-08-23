@@ -30,13 +30,15 @@ router.get('/', (req, res) => {
   res.json({ message: 'Hello, World!' });
 });
 
+//read comments
 router.get('/comments', (req, res) => {
     Comment.find((err, comments) => {
-        if (err) return res.json({ success: false, error: err });
+        if (err) return res.json({ success: false, error: err.message });
         return res.json({ success: true, data: comments })
     });
 });
 
+//add comments
 router.post('/comments', (req, res) => {
     const comment = new Comment;
     const {author, text} = req.body;
@@ -57,6 +59,36 @@ router.post('/comments', (req, res) => {
         return res.json({
             success: true
         });
+    })
+})
+
+//edit comments
+router.put('/comments/:commentId', (req, res) => {
+    const { commentId } = req.params;
+    if (!commentId) {
+        res.json({ success: false, error: "No Id specified"});
+    }
+    Comment.findById(commentId, (err, comment) => {
+        if (err) return res.json({ success: false, error: err.message });
+        const { author, text } = req.body;
+        if (author) comment.author = author;
+        if (text) comment.text = text;
+        comment.save(err => {
+            if (err) return json({ success: false, error: err});
+            return json({ success: true});
+        })
+    })
+})
+
+//delete comments
+router.delete('/comments/:commentId', (req, res) => {
+    const { commentId } = req.params;
+    if (!commentId) {
+        res.json({ success: false, error: "Id cannot be found" });
+    }
+    Comment.findByIdAndRemove(commentId, (err, comment) => {
+        if (err) return res.json({ success: true, error: err });
+        return res.json({ success: true });
     })
 })
 
