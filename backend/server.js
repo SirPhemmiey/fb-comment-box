@@ -2,6 +2,7 @@
 require('dotenv').config();
 
 import express from 'express';
+import path from 'path';
 import bodyParser from 'body-parser';
 import logger from 'morgan';
 import mongoose from 'mongoose';
@@ -92,8 +93,25 @@ router.delete('/comments/:commentId', (req, res) => {
     })
 })
 
+if (process.env.NODE_ENV == 'production') {
+    //Serve static files
+    app.use(express.static(path.join(__dirname, '../client/build')));
+
+    //Handle React Routing, return all requests to React App
+    app.get('*', function (req, res) {
+        res.sendfile(path.join(__dirname, '../client/build', 'index.html'));
+    });
+}
+
+
 // Use our router configuration when we call /api
 app.use('/api', router);
+app.use((req, res, next) => {
+    res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+  next();
+});
 
 app.listen(API_PORT, () => console.log(`Listening with 🔥  on port ${API_PORT}`));
 
