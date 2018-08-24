@@ -96,3 +96,5 @@ router.delete('/comments/:commentId', (req, res) => {
 app.use('/api', router);
 
 app.listen(API_PORT, () => console.log(`Listening with 🔥  on port ${API_PORT}`));
+
+export default app;
