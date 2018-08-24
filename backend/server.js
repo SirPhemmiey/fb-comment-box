@@ -14,8 +14,8 @@ import Comment from './models/comment';
 const app = express();
 const router = express.Router();
 
-// set our port to either a predetermined port number if you have set it up, or 3001
-const API_PORT = process.env.PORT || 3001;
+// set our port to either a predetermined port number if you have set it up, or 5000
+const API_PORT = process.env.PORT || 5000;
 
 //db config
 mongoose.connect(process.env.DB_URI);
